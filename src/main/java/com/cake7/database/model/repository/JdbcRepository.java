@@ -17,8 +17,8 @@ public interface JdbcRepository<T, ID> {
     DataSource getDataSource();
     String getTableName();
 
-    default Optional<T> findById(ID id, String tableName, RowMapper<T> rowMapper) throws SQLException {
-        String sql = "SELECT * FROM " + tableName + " WHERE id = ?";
+    default Optional<T> findById(ID id,  RowMapper<T> rowMapper) throws SQLException {
+        String sql = "SELECT * FROM " + getTableName() + " WHERE id = ?";
         try(Connection conn = getDataSource().getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
 

@@ -4,3 +4,19 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 </web-app>
+
+<bean class="org.springframework.beans.factory.config.PropertySourcesPlaceholderConfigurer">
+<property name="locations">
+    <list>
+        <value>classpath:application.yml</value>
+    </list>
+</property>
+<property name="yamlProperties" value="true" />
+</bean>
+
+<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+<property name="driverClassName" value="${dataSource.driverClassName}" />
+<property name="url" value="${dataSource.url}" />
+<property name="username" value="${dataSource.username}" />
+<property name="password" value="${dataSource.password}" />
+</bean>
