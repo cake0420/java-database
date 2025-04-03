@@ -10,15 +10,13 @@ import java.util.Base64;
 @Component
 public class Encrypt {
     private final MessageDigest digest;
-    private final String salt;  // 한 번 생성한 후 유지할 Salt
 
     public Encrypt() throws NoSuchAlgorithmException {
         this.digest = MessageDigest.getInstance("SHA-256");
-        this.salt = generateSalt(); // 생성 시 Salt 저장
     }
 
     // SHA-256 적용 + 고정된 Salt 사용
-    public String getEncrypt(String pwd) {
+    public String getEncrypt(String pwd, String salt) {
         digest.update((pwd + salt).getBytes());
         byte[] pwdSalt = digest.digest();
 
@@ -31,15 +29,11 @@ public class Encrypt {
     }
 
     // 랜덤한 Salt 생성 (고정된 Salt를 제공)
-    private String generateSalt() {
+    public  String generateSalt() {
         SecureRandom sr = new SecureRandom();
         byte[] saltBytes = new byte[16];
         sr.nextBytes(saltBytes);
         return Base64.getEncoder().encodeToString(saltBytes);
     }
 
-    // Salt를 외부에서 가져올 수 있도록 Getter 제공
-    public String getSalt() {
-        return this.salt;
-    }
 }

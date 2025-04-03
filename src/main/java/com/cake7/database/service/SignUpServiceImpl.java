@@ -36,9 +36,8 @@ public class SignUpServiceImpl implements SignUpService {
             throw new DuplicateKeyException("이미 존재하는 이메일입니다.");
             }
         try {
-                String salt = encrypt.getSalt();
-                logger.info("salt: {}", salt);
-                String encryptPassword = encrypt.getEncrypt(signUpRequestDTO.password());
+                String salt = encrypt.generateSalt();
+                String encryptPassword = encrypt.getEncrypt(signUpRequestDTO.password(), salt);
                 UUID uuid = UUID.randomUUID();
                 byte[] binary_uuid = uuidToBinary.uuidToBytes(uuid);
                 String newPassword = encryptPassword + salt;
