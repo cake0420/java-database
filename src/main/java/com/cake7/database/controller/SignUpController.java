@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")  // 엔드포인트에 공통 URL이 있다면 추가됨
+@RequestMapping(value = "/api", produces = "text/html; charset=UTF-8")  // 엔드포인트에 공통 URL이 있다면 추가됨
 
 public class SignUpController {
     private final SignUpServiceImpl signUpService;
@@ -26,9 +26,10 @@ public class SignUpController {
 
         try {
             Users users = signUpService.signUp(signUpRequestDTO);
+
             return ResponseEntity.status(HttpStatus.OK).body(users.toString());
         } catch (DuplicateKeyException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 이메일입니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일입니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생!");
         }
