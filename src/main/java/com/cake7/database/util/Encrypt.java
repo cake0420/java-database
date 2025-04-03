@@ -1,10 +1,13 @@
 package com.cake7.database.util;
 
+import org.springframework.stereotype.Component;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+@Component
 public class Encrypt {
     private final MessageDigest digest;
     private final String salt;  // 한 번 생성한 후 유지할 Salt

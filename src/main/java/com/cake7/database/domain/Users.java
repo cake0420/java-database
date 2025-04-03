@@ -1,17 +1,15 @@
 package com.cake7.database.domain;
 
-import java.util.UUID;
-
 public class Users {
 
-    private final UUID id;
+    private final byte[] id;
     private final String name;
     private final String email;
     private final String password;
     private final String salt;
 
     // 회원가입 시 사용
-    public Users(UUID id, String name, String email, String password, String salt) {
+    public Users(byte[] id, String name, String email, String password, String salt) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -20,7 +18,7 @@ public class Users {
     }
 
     // 회원정보 조회 시 사용 (비밀번호 제외)
-    public Users(UUID id, String name, String email) {
+    public Users(byte[] id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -29,12 +27,14 @@ public class Users {
     }
 
     // Getter
-    public UUID getId() { return id; }
+    public byte[] getId() { return id; }
 
     public String getName() { return name; }
 
     public String getEmail() { return email; }
 
     public String getPassword() { return password; }
+
+    public String getSalt() { return salt; }
 
 }

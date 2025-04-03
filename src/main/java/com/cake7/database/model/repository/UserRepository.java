@@ -15,11 +15,14 @@ import java.util.UUID;
 public class UserRepository implements JdbcRepository<Users, UUID> {
 
     private final DataSource dataSource;
-    private final RowMapper<Users> rowMapper = (rs, rowNum) -> new Users(
-            UUID.fromString(rs.getString("id")),
-            rs.getString("name"),
-            rs.getString("email")
-    );
+    private final RowMapper<Users> rowMapper = (rs, rowNum) -> {
+
+        return new Users(
+                rs.getBytes("id"),
+                rs.getString("name"),
+                rs.getString("email")
+        );
+    };
 
     public UserRepository(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -53,7 +56,7 @@ public class UserRepository implements JdbcRepository<Users, UUID> {
     }
 
     public void save(Users user) throws SQLException {
-        String sql = "INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (id, name, email, password, salt) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getDataSource().getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -62,6 +65,7 @@ public class UserRepository implements JdbcRepository<Users, UUID> {
             pstmt.setString(2, user.getName());
             pstmt.setString(3, user.getEmail());
             pstmt.setString(4, user.getPassword());
+            pstmt.setString(5, user.getSalt());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

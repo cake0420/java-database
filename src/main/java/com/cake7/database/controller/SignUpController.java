@@ -1,5 +1,6 @@
 package com.cake7.database.controller;
 
+import com.cake7.database.domain.Users;
 import com.cake7.database.model.dto.SignUpRequestDTO;
 import com.cake7.database.service.SignUpServiceImpl;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,8 +25,8 @@ public class SignUpController {
     public ResponseEntity<String> doPost(@RequestBody SignUpRequestDTO signUpRequestDTO) throws Exception {
 
         try {
-            signUpService.signUp(signUpRequestDTO);
-            return ResponseEntity.ok("회원가입 성공");
+            Users users = signUpService.signUp(signUpRequestDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(users.toString());
         } catch (DuplicateKeyException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 이메일입니다.");
         } catch (Exception e) {
