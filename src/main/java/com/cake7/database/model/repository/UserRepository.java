@@ -2,7 +2,6 @@ package com.cake7.database.model.repository;
 
 import com.cake7.database.domain.Users;
 import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -17,14 +16,6 @@ import java.util.Map;
 public class UserRepository implements JdbcRepository<Users, byte[]> {
 
     private final DataSource dataSource;
-    private final RowMapper<Users> rowMapper = (rs, rowNum) -> {
-
-        return new Users(
-                rs.getBytes("id"),
-                rs.getString("name"),
-                rs.getString("email")
-        );
-    };
 
     public UserRepository(DataSource dataSource) {
         this.dataSource = dataSource;
