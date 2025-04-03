@@ -41,12 +41,13 @@ public class SignUpServiceImpl implements SignUpService {
                 String encryptPassword = encrypt.getEncrypt(signUpRequestDTO.password());
                 UUID uuid = UUID.randomUUID();
                 byte[] binary_uuid = uuidToBinary.uuidToBytes(uuid);
+                String newPassword = encryptPassword + salt;
                 // UUID를 포함한 Users 객체 생성
                 Users newUser = new Users(
                         binary_uuid,
                         signUpRequestDTO.name(),
                         signUpRequestDTO.email(),
-                        encryptPassword,
+                        newPassword,
                         salt
                 );
 
