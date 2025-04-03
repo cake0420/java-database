@@ -1,17 +1,16 @@
 package com.cake7.database.domain;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class BookLoans {
-    private final UUID id;
+    private final byte[] id;
     private final LocalDateTime loanDate;
     private final LocalDateTime dueDate;
     private final LocalDateTime returnDate;
     private final int penaltyUntil;
     private final boolean returnStatus;
 
-    public BookLoans(UUID id, LocalDateTime loanDate, LocalDateTime dueDate,
+    public BookLoans(byte[] id, LocalDateTime loanDate, LocalDateTime dueDate,
                      LocalDateTime returnDate, int penaltyUntil, boolean returnStatus) {
         this.id = id;
         this.loanDate = loanDate;
@@ -21,7 +20,7 @@ public class BookLoans {
         this.returnStatus = returnStatus;
     }
 
-    public UUID getId() {
+    public byte[] getId() {
         return id;
     }
     public LocalDateTime getLoanDate() {
