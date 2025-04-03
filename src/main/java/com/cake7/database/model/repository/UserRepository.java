@@ -1,6 +1,7 @@
 package com.cake7.database.model.repository;
 
 import com.cake7.database.domain.Users;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -38,7 +39,7 @@ public class UserRepository implements JdbcRepository<Users, UUID> {
         return "users";
     }
 
-    public boolean existByEmail(String email) {
+    public boolean existByEmail(String email) throws SQLException {
         String sql = "SELECT count(*) FROM " + getTableName() + " WHERE email = ? LIMIT 1";
         try(Connection conn = getDataSource().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -51,6 +52,11 @@ public class UserRepository implements JdbcRepository<Users, UUID> {
             }
         } catch (SQLException e) {
             logger.error("SQL Exception: " + e.getMessage());
+            throw new SQLException("쿼리 실행 중 오류 발생" +e.getMessage());
+
+        } catch (DataAccessResourceFailureException e) {
+            logger.error("DataAccessResourceFailureException: " + e.getMessage());
+            throw new DataAccessResourceFailureException("데이터베이스 연결 또는 쿼리 실행 중 오류 발생" +e.getMessage());
         }
         return false;
     }
@@ -70,7 +76,11 @@ public class UserRepository implements JdbcRepository<Users, UUID> {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             logger.error("SQL Exception: " + e.getMessage());
-            throw e;
+            throw new SQLException("쿼리 실행 중 오류 발생" +e.getMessage());
+
+        } catch (DataAccessResourceFailureException e) {
+            logger.error("DataAccessResourceFailureException: " + e.getMessage());
+            throw new DataAccessResourceFailureException("데이터베이스 연결 또는 쿼리 실행 중 오류 발생" +e.getMessage());
         }
     }
 

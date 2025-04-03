@@ -8,10 +8,13 @@ import com.cake7.database.util.UuidToBinary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.rmi.ServerException;
+import java.sql.SQLException;
 import java.util.UUID;
 
 @Service
@@ -54,9 +57,16 @@ public class SignUpServiceImpl implements SignUpService {
                 userRepository.save(newUser);
                 return newUser;
 
+        } catch (SQLException e) {
+            logger.error("SQL Exception: " + e.getMessage());
+            throw new SQLException("쿼리 실행 중 오류 발생" +e.getMessage());
+
+        } catch (DataAccessResourceFailureException e) {
+            logger.error("DataAccessResourceFailureException: " + e.getMessage());
+            throw new DataAccessResourceFailureException("데이터베이스 연결 또는 쿼리 실행 중 오류 발생" +e.getMessage());
         } catch (Exception e) {
             logger.error(e.getMessage());
-            throw new Exception("회원 가입 중 오류 발생", e);
+            throw new ServerException(e.getMessage());
         }
     }
 }
